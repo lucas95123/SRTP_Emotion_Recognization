@@ -110,7 +110,7 @@ namespace SharpGLWinformsApplication1
                 gl.Vertex(i, Svalue.getValue(i)+0);
             }
             gl.End();
-            gl.Color(0.0f, 0.0f, 1.0f);
+            gl.Color(1.0f, 1.0f, 0.0f);
             gl.Begin(OpenGL.GL_LINE_STRIP);
             for (int i = 10; i < this.openGLControl.Width - 200; i++)
             {
