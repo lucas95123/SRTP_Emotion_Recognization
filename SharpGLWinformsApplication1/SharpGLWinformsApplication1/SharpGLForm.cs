@@ -14,16 +14,21 @@ namespace SharpGLWinformsApplication1
     /// <summary>
     /// The main form class.
     /// </summary>
+    /// 
     public partial class SharpGLForm : Form
     {
-        private CircularArray receivedValue;
+        private CircularArray receivedValue;//heart beat
+        private CircularArray Evalue;//Muscle
+        private CircularArray Svalue;//Skin
         /// <summary>
         /// Initializes a new instance of the <see cref="SharpGLForm"/> class.
         /// </summary>
         public SharpGLForm()
         {
             InitializeComponent();
-            receivedValue = new CircularArray(this.MinimumSize.Width-10);
+            receivedValue = new CircularArray(this.MinimumSize.Width-200);
+            Svalue = new CircularArray(this.MinimumSize.Width - 200);
+            Evalue = new CircularArray(this.MinimumSize.Width - 200); 
         }
 
         private void SharpGLForm_Load(object sender, EventArgs e)
@@ -51,7 +56,7 @@ namespace SharpGLWinformsApplication1
             //  Load the identity matrix.
             gl.LoadIdentity();
 
-            gl.Ortho2D(0, this.openGLControl.Size.Width, 0, this.openGLControl.Size.Height*3);
+            gl.Ortho2D(0, this.openGLControl.Size.Width, 0, this.openGLControl.Size.Height * 2);
 
             gl.Color(1.0f,1.0f,1.0f);
             gl.Begin(OpenGL.GL_LINE_STRIP);
@@ -69,16 +74,56 @@ namespace SharpGLWinformsApplication1
             gl.Color(0.0f, 1.0f, 0.0f);
             //gl.Vertex(0, 0);
             //gl.Vertex(50, 100);
+            gl.Begin(OpenGL.GL_LINE_STRIP);//|
+            gl.Vertex(this.openGLControl.Width - 200, 0);
+            gl.Vertex(this.openGLControl.Width - 200, this.openGLControl.Size.Height*3 - 1);
+            gl.End();
+            int Height = this.openGLControl.Size.Height;
+            for (int i = 0; i < 24; i ++)
+            {
+                gl.Begin(OpenGL.GL_LINE_STRIP);
+                gl.Vertex(0, i*Height/12);
+                gl.Vertex(5, i*Height/12);
+                gl.End();
+            }
+                
+            /* gl.Color(1.0, 0.0f, 0.0f);
             gl.Begin(OpenGL.GL_LINE_STRIP);
-            for (int i = 10; i < this.openGLControl.Width - 1; i++)
+            for (int i = 10; i < this.openGLControl.Width - 200; i++)
             {
                 if (receivedValue.getValue(i) < 60)
                     continue;
                 gl.Vertex(i, receivedValue.getValue(i));
             }
+            gl.End();*/
+            gl.Color(0.0f, 1.0f, 0.0f);
+            gl.Begin(OpenGL.GL_LINE_STRIP);
+            gl.Vertex(1, this.openGLControl.Size.Height);
+            gl.Vertex(openGLControl.Size.Width - 200, this.openGLControl.Size.Height);
             gl.End();
+            gl.Color(1.0f, 0.0f, 0.0f);
+            gl.Begin(OpenGL.GL_LINE_STRIP);
+            for (int i = 10; i < this.openGLControl.Width - 200; i++)
+            {
+                if (Svalue.getValue(i) < 60||Svalue.getValue(i)>650)
+                    continue;
+                gl.Vertex(i, Svalue.getValue(i)+0);
+            }
+            gl.End();
+            gl.Color(0.0f, 0.0f, 1.0f);
+            gl.Begin(OpenGL.GL_LINE_STRIP);
+            for (int i = 10; i < this.openGLControl.Width - 200; i++)
+            {
+                if (Evalue.getValue(i) < 60||Evalue.getValue(i)>200)
+                    continue;
+                gl.Vertex(i, Evalue.getValue(i) + this.openGLControl.Size.Height);
+            }
+            gl.End();
+            //for (int i=10;)
             gl.Flush();
-
+            label1.Text="GSR   "+Svalue.newest.ToString();
+            label2.Text="EMG   "+Evalue.newest.ToString();
+            label3.Text="HB   "+receivedValue.newest.ToString();
         }
 
         /// <summary>
@@ -158,7 +203,13 @@ namespace SharpGLWinformsApplication1
             {
                 try
                 {
-                    receivedValue.addValue(Convert.ToInt32(valueBuffer[i]));
+                    switch (valueBuffer[i][0]) { 
+                        case 'B':receivedValue.addValue(Convert.ToInt32(valueBuffer[i].Substring(1)));
+                            break;
+                        case 'S': Svalue.addValue(Convert.ToInt32(valueBuffer[i].Substring(1)));
+                            break;
+                        case 'E': Evalue.addValue(Convert.ToInt32(valueBuffer[i].Substring(1)));break;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -202,7 +253,7 @@ namespace SharpGLWinformsApplication1
             try
             {
                 string portName = this.toolStripComboBox1.SelectedItem.ToString();
-                port = new SerialPort(portName, 9600);
+                port = new SerialPort(portName, 115200);
                 port.Encoding = Encoding.ASCII;
                 port.DataReceived += port_DataReceived;
                 port.Open();
@@ -276,6 +327,21 @@ namespace SharpGLWinformsApplication1
         {
             this.textBox1.Text = "";
             receivedValue.empty();
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
         }
 
     }

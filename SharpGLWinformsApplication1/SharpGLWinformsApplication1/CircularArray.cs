@@ -12,7 +12,7 @@ namespace SharpGLWinformsApplication1
         private int HEAD=0;
         private int TAIL=0;
         private int[] Array;
-
+        public int newest;
         public CircularArray(int maxSize)
         {
             MAXSIZE=maxSize;
@@ -29,13 +29,13 @@ namespace SharpGLWinformsApplication1
         {
             if(HEAD!=TAIL)
             {
-               Array[TAIL]=Value;
+               Array[TAIL]=newest=Value;
                 TAIL++;
                 ELEMENTNUM++;
             }
             else
             {
-                Array[HEAD]=Value;
+                Array[HEAD]=newest=Value;
                 if(ELEMENTNUM!=0)
                     HEAD++;
                 else
