@@ -55,5 +55,14 @@ namespace SharpGLWinformsApplication1
                 i -= MAXSIZE;
             return Array[i];
         }
+
+        public void empty()
+        {
+            for (int i = 0; i < ELEMENTNUM; i++)
+                Array[i] = 0;
+            ELEMENTNUM = 0;
+            HEAD = 0;
+            TAIL = 0;
+        }
     }
 }

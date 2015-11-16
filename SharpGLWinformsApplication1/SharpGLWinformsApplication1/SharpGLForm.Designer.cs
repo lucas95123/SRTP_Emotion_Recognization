@@ -59,7 +59,7 @@
             this.openGLControl.DrawFPS = true;
             this.openGLControl.Location = new System.Drawing.Point(0, 28);
             this.openGLControl.Name = "openGLControl";
-            this.openGLControl.OpenGLVersion = SharpGL.Version.OpenGLVersion.OpenGL4_4;
+            this.openGLControl.OpenGLVersion = SharpGL.Version.OpenGLVersion.OpenGL2_1;
             this.openGLControl.RenderContextType = SharpGL.RenderContextType.FBO;
             this.openGLControl.RenderTrigger = SharpGL.RenderTrigger.TimerBased;
             this.openGLControl.Size = new System.Drawing.Size(1179, 651);
@@ -109,7 +109,7 @@
             // 
             // btnRead
             // 
-            this.btnRead.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnRead.Image = ((System.Drawing.Image)(resources.GetObject("btnRead.Image")));
             this.btnRead.Name = "btnRead";
             this.btnRead.Size = new System.Drawing.Size(76, 22);
             this.btnRead.Text = "开始读取";
@@ -117,7 +117,7 @@
             // 
             // btnStopRead
             // 
-            this.btnStopRead.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnStopRead.Image = ((System.Drawing.Image)(resources.GetObject("btnStopRead.Image")));
             this.btnStopRead.Name = "btnStopRead";
             this.btnStopRead.Size = new System.Drawing.Size(76, 22);
             this.btnStopRead.Text = "停止读取";
@@ -136,17 +136,19 @@
             // 
             // btnArduinoStartSend
             // 
-            this.btnArduinoStartSend.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnArduinoStartSend.Image = ((System.Drawing.Image)(resources.GetObject("btnArduinoStartSend.Image")));
             this.btnArduinoStartSend.Name = "btnArduinoStartSend";
             this.btnArduinoStartSend.Size = new System.Drawing.Size(76, 22);
             this.btnArduinoStartSend.Text = "开始发送";
+            this.btnArduinoStartSend.Click += new System.EventHandler(this.btnArduinoStartSend_Click);
             // 
             // btnArduinoStopSend
             // 
-            this.btnArduinoStopSend.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnArduinoStopSend.Image = ((System.Drawing.Image)(resources.GetObject("btnArduinoStopSend.Image")));
             this.btnArduinoStopSend.Name = "btnArduinoStopSend";
             this.btnArduinoStopSend.Size = new System.Drawing.Size(76, 22);
             this.btnArduinoStopSend.Text = "停止发送";
+            this.btnArduinoStopSend.Click += new System.EventHandler(this.btnArduinoStopSend_Click);
             // 
             // toolStripSeparator2
             // 
@@ -155,10 +157,11 @@
             // 
             // toolStripButton5
             // 
-            this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
             this.toolStripButton5.Name = "toolStripButton5";
-            this.toolStripButton5.Size = new System.Drawing.Size(36, 22);
+            this.toolStripButton5.Size = new System.Drawing.Size(52, 22);
             this.toolStripButton5.Text = "清屏";
+            this.toolStripButton5.Click += new System.EventHandler(this.toolStripButton5_Click);
             // 
             // toolStripButton6
             // 
@@ -203,6 +206,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
+            this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(1179, 793);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.toolStrip1);

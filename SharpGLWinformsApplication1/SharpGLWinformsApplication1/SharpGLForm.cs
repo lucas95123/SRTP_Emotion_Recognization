@@ -23,7 +23,7 @@ namespace SharpGLWinformsApplication1
         public SharpGLForm()
         {
             InitializeComponent();
-            receivedValue = new CircularArray(this.MinimumSize.Width);
+            receivedValue = new CircularArray(this.MinimumSize.Width-10);
         }
 
         private void SharpGLForm_Load(object sender, EventArgs e)
@@ -51,18 +51,30 @@ namespace SharpGLWinformsApplication1
             //  Load the identity matrix.
             gl.LoadIdentity();
 
-            gl.Ortho2D(0, this.openGLControl.Size.Width, 0, this.openGLControl.Size.Height);
+            gl.Ortho2D(0, this.openGLControl.Size.Width, 0, this.openGLControl.Size.Height*3);
 
-
+            gl.Color(1.0f,1.0f,1.0f);
+            gl.Begin(OpenGL.GL_LINE_STRIP);
+                gl.Vertex(1.0d,0.0d);
+                gl.Vertex(1.0d, this.openGLControl.Size.Height*3);
+                for (int i = 0; i < 3;i++ )
+                {
+                    for(int j=0;j<openGLControl.Size.Height;j+=5)
+                    {
+                        gl.Vertex(0.0d, i * openGLControl.Size.Height + j);
+                        gl.Vertex(1.0d, i * openGLControl.Size.Height + j);
+                    }
+                }
+                    gl.End();
             gl.Color(0.0f, 1.0f, 0.0f);
             //gl.Vertex(0, 0);
             //gl.Vertex(50, 100);
             gl.Begin(OpenGL.GL_LINE_STRIP);
-            for (int i = 0; i < this.openGLControl.Width - 1; i++)
+            for (int i = 10; i < this.openGLControl.Width - 1; i++)
             {
-                if (receivedValue.getValue(i) <= 70)
+                if (receivedValue.getValue(i) < 60)
                     continue;
-                gl.Vertex(i,receivedValue.getValue(i));
+                gl.Vertex(i, receivedValue.getValue(i));
             }
             gl.End();
             gl.Flush();
@@ -121,8 +133,8 @@ namespace SharpGLWinformsApplication1
         {
             this.InitializeSerialPort();
 
-            this.btnRead.Enabled = true;
-            this.btnStopRead.Enabled = false;
+            this.btnRead.Enabled = false;
+            this.btnStopRead.Enabled = true;
             this.btnArduinoStartSend.Enabled = false;
             this.btnArduinoStopSend.Enabled = true;
         }
@@ -139,30 +151,29 @@ namespace SharpGLWinformsApplication1
 
         void RefreshInfoTextBox()
         {
-            string valuebuffer = this.ReadSerialData();
+            string value = this.ReadSerialData();
             Action<string> setValueAction = text => this.textBox1.Text += text;
-
-            string[] value = valuebuffer.Split(' ');
-
-            try
+            string[] valueBuffer = value.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+            for (int i = 0; i < valueBuffer.Length; i++)
             {
-                for (int i = 0; i < value.Length; i++)
-                    receivedValue.addValue(Convert.ToInt32(value[i]));
+                try
+                {
+                    receivedValue.addValue(Convert.ToInt32(valueBuffer[i]));
+                }
+                catch (Exception ex)
+                {
+
+                }
             }
-            catch (FormatException ex)
+
+            if (this.textBox1.InvokeRequired)
             {
-
+                this.textBox1.Invoke(setValueAction, value);
             }
-
-            //if (this.textBox1.InvokeRequired)
-            //{
-            //    for (int i = 0; i < value.Length; i++)
-            //        this.textBox1.Invoke(setValueAction, value[i]+" ");
-            //}
-            //else
-            //{
-            //    setValueAction(valuebuffer);
-            //}
+            else
+            {
+                setValueAction(value);
+            }
         }
 
         void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
@@ -245,6 +256,26 @@ namespace SharpGLWinformsApplication1
         {
             textBox1.SelectionStart = textBox1.Text.Length;
             textBox1.ScrollToCaret();
+        }
+
+        private void btnArduinoStartSend_Click(object sender, EventArgs e)
+        {
+            this.btnArduinoStartSend.Enabled = false;
+            this.btnArduinoStopSend.Enabled = true;
+            this.ChangeArduinoSendStatus(true);
+        }
+
+        private void btnArduinoStopSend_Click(object sender, EventArgs e)
+        {
+            this.btnArduinoStartSend.Enabled = true;
+            this.btnArduinoStopSend.Enabled = false;
+            this.ChangeArduinoSendStatus(false);
+        }
+
+        private void toolStripButton5_Click(object sender, EventArgs e)
+        {
+            this.textBox1.Text = "";
+            receivedValue.empty();
         }
 
     }
