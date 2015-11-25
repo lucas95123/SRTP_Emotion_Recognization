@@ -58,7 +58,7 @@ namespace SharpGLWinformsApplication1
             //  Load the identity matrix.
             gl.LoadIdentity();
 
-            gl.Ortho2D(0, this.openGLControl.Size.Width, 0, this.openGLControl.Size.Height * 2);
+            gl.Ortho2D(0, this.openGLControl.Size.Width, 0, this.openGLControl.Size.Height * 3);
 
             gl.Color(1.0f,1.0f,1.0f);
             gl.Begin(OpenGL.GL_LINE_STRIP);
@@ -80,8 +80,8 @@ namespace SharpGLWinformsApplication1
             gl.Vertex(this.openGLControl.Width - 200, 0);
             gl.Vertex(this.openGLControl.Width - 200, this.openGLControl.Size.Height*3 - 1);
             gl.End();
-            int Height = this.openGLControl.Size.Height;
-            for (int i = 0; i < 24; i ++)
+            int Height = this.openGLControl.Size.Height;//draw the coordinate
+            for (int i = 0; i < 36; i ++)
             {
                 gl.Begin(OpenGL.GL_LINE_STRIP);
                 gl.Vertex(0, i*Height/12);
@@ -103,6 +103,10 @@ namespace SharpGLWinformsApplication1
             gl.Vertex(1, this.openGLControl.Size.Height);
             gl.Vertex(openGLControl.Size.Width - 200, this.openGLControl.Size.Height);
             gl.End();
+            gl.Begin(OpenGL.GL_LINE_STRIP);
+            gl.Vertex(1, this.openGLControl.Size.Height*2);
+            gl.Vertex(openGLControl.Size.Width - 200, this.openGLControl.Size.Height*2);
+            gl.End();
             gl.Color(1.0f, 0.0f, 0.0f);
             gl.Begin(OpenGL.GL_LINE_STRIP);
             for (int i = 10; i < this.openGLControl.Width - 200; i++)
@@ -122,10 +126,20 @@ namespace SharpGLWinformsApplication1
             }
             gl.End();
             //for (int i=10;)
+            gl.Color(1.0f, 0.0f, 0.0f);
+            gl.Begin(OpenGL.GL_LINE_STRIP);
+            for (int i = 10; i < this.openGLControl.Width - 200; i++)
+            {
+                if (Cvalue.getValue(i) < 60 || Cvalue.getValue(i) > 1000)
+                    continue;
+                gl.Vertex(i, Evalue.getValue(i) + 2*this.openGLControl.Size.Height);
+            }
+            gl.End();
             gl.Flush();
             label1.Text="GSR   "+Svalue.newest.ToString();
             label2.Text="EMG   "+Evalue.newest.ToString();
             label3.Text="HB   "+receivedValue.newest.ToString();
+            label4.Text = "ET   " + Cvalue.newest.ToString();
         }
 
         /// <summary>
