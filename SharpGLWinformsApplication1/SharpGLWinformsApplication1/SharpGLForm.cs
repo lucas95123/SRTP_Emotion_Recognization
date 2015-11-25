@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO.Ports;
 using SharpGL;
-
+using System.IO;
 namespace SharpGLWinformsApplication1
 {
     /// <summary>
@@ -19,7 +19,8 @@ namespace SharpGLWinformsApplication1
     {
         private CircularArray receivedValue;//heart beat
         private CircularArray Evalue;//Muscle
-        private CircularArray Svalue;//Skin
+        private CircularArray Svalue;//Skin.
+        private CircularArray Cvalue;//
         /// <summary>
         /// Initializes a new instance of the <see cref="SharpGLForm"/> class.
         /// </summary>
@@ -28,7 +29,8 @@ namespace SharpGLWinformsApplication1
             InitializeComponent();
             receivedValue = new CircularArray(this.MinimumSize.Width-200);
             Svalue = new CircularArray(this.MinimumSize.Width - 200);
-            Evalue = new CircularArray(this.MinimumSize.Width - 200); 
+            Evalue = new CircularArray(this.MinimumSize.Width - 200);
+            Cvalue = new CircularArray(this.MinimumSize.Width - 200); 
         }
 
         private void SharpGLForm_Load(object sender, EventArgs e)
@@ -197,6 +199,8 @@ namespace SharpGLWinformsApplication1
         void RefreshInfoTextBox()
         {
             string value = this.ReadSerialData();
+            FileStream TextFile = new FileStream(@"F:\newFile.txt", FileMode.Append);
+            StreamWriter sw = new StreamWriter(TextFile, Encoding.Default);
             Action<string> setValueAction = text => this.textBox1.Text += text;
             string[] valueBuffer = value.Split(new string[] { "\r\n" }, StringSplitOptions.None);
             for (int i = 0; i < valueBuffer.Length; i++)
@@ -204,19 +208,34 @@ namespace SharpGLWinformsApplication1
                 try
                 {
                     switch (valueBuffer[i][0]) { 
-                        case 'B':receivedValue.addValue(Convert.ToInt32(valueBuffer[i].Substring(1)));
+                        case 'B':
+                            receivedValue.addValue(Convert.ToInt32(valueBuffer[i].Substring(1)));
                             break;
-                        case 'S': Svalue.addValue(Convert.ToInt32(valueBuffer[i].Substring(1)));
+                        case 'S': 
+                            Svalue.addValue(Convert.ToInt32(valueBuffer[i].Substring(1)));
                             break;
-                        case 'E': Evalue.addValue(Convert.ToInt32(valueBuffer[i].Substring(1)));break;
+                        case 'E': 
+                            Evalue.addValue(Convert.ToInt32(valueBuffer[i].Substring(1)));
+                            break;
+                        case 'C': 
+                            Cvalue.addValue(Convert.ToInt32(valueBuffer[i].Substring(1)));
+                            break;
                     }
+                    //string s="nihao";
+                    sw.Write(DateTime.Now.ToLongTimeString().ToString());
+                    sw.Write("B " + receivedValue.newest.ToString());
+                    sw.Write("S " + Svalue.newest.ToString());
+                    sw.Write("E " + Evalue.newest.ToString());
+                    sw.Write("C " + Cvalue.newest.ToString());
+                    sw.Write("");            
                 }
                 catch (Exception ex)
                 {
 
                 }
             }
-
+            sw.Close();
+            TextFile.Close();
             if (this.textBox1.InvokeRequired)
             {
                 this.textBox1.Invoke(setValueAction, value);
