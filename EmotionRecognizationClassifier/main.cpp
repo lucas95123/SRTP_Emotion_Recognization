@@ -2,6 +2,7 @@
 #include <string>
 #include "svm.h"
 #include "knn.h"
+#include "cvd.h"
 using namespace std;
 
 void exit_with_help()
@@ -12,6 +13,8 @@ void exit_with_help()
 		"-t classifier type: (default 0 svm)\n"
 		"0 -- SVM/n"
 		"1 -- KNN/n"
+		"2 -- ID3/n"
+		"3 -- Random Forest"
 		);
 	exit(1);
 }
@@ -51,6 +54,12 @@ int main(int argc, char** argv)
 		KNNDriver knn_driver(K);
 		knn_driver.createTrainingset(training_set_file);
 		knn_driver.KNNClassifyDriver(testing_set_file);
+	}
+	else if (mode==2)
+	{
+		CvDDriver cvd_driver;
+		cvd_driver.createTrainingset(training_set_file);
+		cvd_driver.CvDClassifyDriver(testing_set_file);
 	}
 	system("pause");
 }
