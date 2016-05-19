@@ -1,0 +1,3 @@
+Decision Tree Classifier
+Among 8 cases, there are 4 success and 4 fail
+The rate is 0.5

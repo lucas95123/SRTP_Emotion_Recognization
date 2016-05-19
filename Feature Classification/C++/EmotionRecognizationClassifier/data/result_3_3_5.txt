@@ -1,0 +1,4 @@
+KNN Classifier
+Please input K: Random Forest Classifier
+Among 5 cases, there are 3 success and 2 fail
+The rate is 0.6

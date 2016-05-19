@@ -1,0 +1,8 @@
+SVM Classifier
+.*
+optimization finished, #iter = 32
+nu = 0.869565
+obj = -12.233654, rho = 0.226565
+nSV = 23, nBSV = 11
+Total nSV = 23
+Accuracy = 57.1429% (4/7) (classification)

@@ -1,0 +1,6 @@
+Random Forest Classifier
+Among 5 cases, there are 2 success and 3 fail
+The rate is 0.4
+Random Forest Classifier
+Among 5 cases, there are 2 success and 3 fail
+The rate is 0.4

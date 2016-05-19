@@ -1,0 +1,6 @@
+Random Forest Classifier
+Among 7 cases, there are 4 success and 3 fail
+The rate is 0.571429
+Random Forest Classifier
+Among 7 cases, there are 4 success and 3 fail
+The rate is 0.571429

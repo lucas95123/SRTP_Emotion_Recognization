@@ -1,0 +1,3 @@
+Decision Tree Classifier
+Among 7 cases, there are 4 success and 3 fail
+The rate is 0.571429

@@ -1,0 +1,3 @@
+Decision Tree Classifier
+Among 6 cases, there are 6 success and 0 fail
+The rate is 1

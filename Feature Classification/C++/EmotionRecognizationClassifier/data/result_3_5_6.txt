@@ -1,0 +1,3 @@
+Random Forest Classifier
+Among 3 cases, there are 2 success and 1 fail
+The rate is 0.666667
